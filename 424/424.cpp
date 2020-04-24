@@ -8,16 +8,16 @@ int main(int argc, const char * argv[]) {
 
 	Mat src1 = imread("D:\\360downloads\\16.jpg");
 	Mat src2 = imread("D:\\360downloads\\15.jpg");
-	Mat hog = imread("D:\\360downloads\\14.jpg");
+	Mat dsp = imread("D:\\360downloads\\14.jpg");
 	Mat gx, gy;
 	Mat mag, angle;
-	Sobel(hog, gx, CV_32F, 1, 0, 1);
-	Sobel(hog, gy, CV_32F, 0, 1, 1);
+	Sobel(dsp, gx, CV_32F, 1, 0, 1);
+	Sobel(dsp, gy, CV_32F, 0, 1, 1);
 	cartToPolar(gx, gy, mag, angle, true);
 	//图像划分为多个16×16的cell
 	int cellSize = 16;
-	int nX = hog.cols / cellSize;
-	int nY = hog.rows / cellSize;
+	int nX = dsp.cols / cellSize;
+	int nY = dsp.rows / cellSize;
 	int cellnum = nX * nY;
 	int bins = cellnum * 8;
 	float* ref_hist = new float[bins];
@@ -25,16 +25,23 @@ int main(int argc, const char * argv[]) {
 	int cell = 0;
 	for (int j = 0; j < nY; j++)
 	{
+		
 		for (int i = 0; i < nX; i++)
 		{
+			
 			for (int y = j * cellSize; y < (j + 1) * cellSize; y++)
 			{
+				
 				for (int x = i * cellSize; x < (i + 1) * cellSize; x++)
 				{
 					int intangle = 0;
+					
 					float fangle = angle.at<float>(y, x);
+					
 					intangle = fangle / 45;
+					
 					float magnitude = mag.at<float>(y, x);
+					
 					ref_hist[intangle + cell * 8] += magnitude;
 				}
 			}
